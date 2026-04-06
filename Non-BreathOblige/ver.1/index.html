@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Non-Breath Oblige</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      width: 100vw;
+      min-height: 100vh;
+      overflow: hidden;
+      background: #fff;
+      user-select: none;
+      transition: background 0.3s, filter 0.3s;
+    }
+
+    body.inverted { filter: invert(1); }
+
+    .scattered-img {
+      position: absolute;
+      object-fit: cover;
+      cursor: grab;
+      display: block;
+    }
+    .scattered-img:active { cursor: grabbing; }
+
+    #text-block {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      z-index: 10;
+      transition: transform 0.3s ease;
+    }
+
+    #text-block h1 {
+      pointer-events: auto;
+      cursor: default;
+      line-height: 0.9;
+      letter-spacing: -0.04em;
+      font-weight: 900;
+      font-size: clamp(2rem, 6vw, 6rem);
+      color: #000;
+      font-family: "Georgia", serif;
+      margin-bottom: 10px;
+    }
+
+    #enter-btn {
+      pointer-events: auto;
+      margin-top: 36px;
+      padding: 0;
+      background: none;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      opacity: 0;
+      animation: fadeInBtn 1.2s ease 0.6s forwards;
+    }
+
+    @keyframes fadeInBtn {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    #enter-btn .btn-label {
+      font-family: monospace;
+      font-size: 11px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: #000;
+      font-weight: 700;
+      transition: letter-spacing 0.3s ease;
+    }
+    #enter-btn .btn-line {
+      width: 1px;
+      height: 0;
+      background: #000;
+      transition: height 0.4s ease;
+    }
+    #enter-btn:hover .btn-label { letter-spacing: 0.5em; }
+    #enter-btn:hover .btn-line  { height: 28px; }
+    body.inverted #enter-btn .btn-label { color: #fff; }
+    body.inverted #enter-btn .btn-line  { background: #fff; }
+
+    #hint {
+      position: absolute;
+      top: 48%;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 20;
+      font-family: monospace;
+      font-size: 11px;
+      color: #999;
+      pointer-events: none;
+    }
+
+    #legend {
+      position: absolute;
+      bottom: 24px;
+      left: 24px;
+      z-index: 20;
+      font-family: monospace;
+      font-size: 11px;
+      color: #aaa;
+      line-height: 1.8;
+      opacity: 0.7;
+    }
+    #legend span { color: #000; font-weight: 700; }
+
+    #clock {
+      position: absolute;
+      top: 24px;
+      left: 24px;
+      z-index: 20;
+      font-family: monospace;
+      font-size: 11px;
+      color: #aaa;
+      line-height: 1.6;
+      opacity: 0.7;
+      pointer-events: none;
+    }
+    #clock .clock-time {
+      font-size: 18px;
+      color: #000;
+      font-weight: 700;
+      display: block;
+    }
+
+    #archive-tab {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      z-index: 20;
+      font-family: monospace;
+      font-size: 11px;
+      color: #aaa;
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+    }
+    #archive-tab:hover { opacity: 1; color: #000; }
+  </style>
+</head>
+<body>
+
+  <a id="archive-tab" href="#">Archive</a>
+
+  <div id="clock">
+    <span class="clock-time" id="clockTime"></span>
+    <span id="clockDate"></span>
+  </div>
+
+  <div id="text-block">
+    <h1 id="line1">Non-Breath</h1>
+    <h1 id="line2">Oblige</h1>
+    <button id="enter-btn" onclick="window.location.href='garden.html'">
+      <span class="btn-line"></span>
+      <span class="btn-label">Enter System</span>
+    </button>
+  </div>
+
+  <p id="hint">press spacebar</p>
+
+  <div id="legend">
+    <p><span>SPACE</span> shuffle</p>
+    <p><span>D</span> scale text</p>
+    <p><span>J</span> invert</p>
+    <p><span>A</span> change font</p>
+    <p><span>DRAG</span> move images</p>
+  </div>
+
+  <script>
+    const fonts = [
+      '"Press Start 2P", monospace',
+      '"Courier New", monospace',
+      'Georgia, serif',
+      '"Arial Black", sans-serif',
+      'Impact, sans-serif',
+    ];
+
+   const imageData = [
+      { id: 1, src: "../Img/gif1.gif", x: 2,  y: 8,  w: 320, h: 220 },
+      { id: 2, src: "../Img/a5.jpg",   x: 30, y: 25, w: 160, h: 200 },
+      { id: 3, src: "../Img/a4.jpg",   x: 5,  y: 55, w: 200, h: 260 },
+      { id: 4, src: "../Img/a6.jpg",   x: 65, y: 30, w: 320, h: 250 },
+      { id: 5, src: "../Img/a7.jpg",   x: 18, y: 65, w: 180, h: 230 },
+      { id: 6, src: "../Img/sin.gif",  x: 55, y: 60, w: 200, h: 200 },
+    ];
+    
+    let images    = imageData.map(d => ({ ...d }));
+    let inverted  = false;
+    let textScale = 1;
+    let fontIndex = 0;
+
+    const body      = document.body;
+    const textBlock = document.getElementById("text-block");
+    const line1     = document.getElementById("line1");
+    const line2     = document.getElementById("line2");
+
+    function renderImages() {
+      document.querySelectorAll(".scattered-img").forEach(el => el.remove());
+      images.forEach(img => {
+        const el = document.createElement("img");
+        el.src       = img.src;
+        el.className = "scattered-img";
+        el.loading   = "lazy";
+        el.draggable = false;
+        el.style.left   = img.x + "%";
+        el.style.top    = img.y + "%";
+        el.style.width  = img.w + "px";
+        el.style.height = img.h + "px";
+
+        el.addEventListener("mousedown", (e) => {
+          e.preventDefault();
+          let lastX = e.clientX, lastY = e.clientY;
+          const onMove = (e) => {
+            const dx = e.clientX - lastX, dy = e.clientY - lastY;
+            lastX = e.clientX; lastY = e.clientY;
+            const state = images.find(i => i.id === img.id);
+            if (!state) return;
+            state.x += (dx / window.innerWidth)  * 100;
+            state.y += (dy / window.innerHeight) * 100;
+            el.style.left = state.x + "%";
+            el.style.top  = state.y + "%";
+          };
+          const onUp = () => {
+            window.removeEventListener("mousemove", onMove);
+            window.removeEventListener("mouseup",   onUp);
+          };
+          window.addEventListener("mousemove", onMove);
+          window.addEventListener("mouseup",   onUp);
+        });
+
+        body.insertBefore(el, body.firstChild);
+      });
+    }
+
+    function applyFont() {
+      line1.style.fontFamily = fonts[fontIndex];
+      line2.style.fontFamily = fonts[fontIndex];
+    }
+
+    function shuffle() {
+      images = images.map(img => ({
+        ...img,
+        x: Math.random() * 75,
+        y: Math.random() * 70,
+        w: 120 + Math.random() * 250,
+        h: 120 + Math.random() * 250,
+      }));
+      renderImages();
+    }
+
+    window.addEventListener("keydown", (e) => {
+      switch (e.key.toLowerCase()) {
+        case " ":
+          e.preventDefault(); shuffle(); break;
+        case "d":
+          textScale = textScale >= 2 ? 0.5 : textScale + 0.25;
+          textBlock.style.transform = `scale(${textScale})`; break;
+        case "j":
+          inverted = !inverted;
+          body.classList.toggle("inverted", inverted); break;
+        case "a":
+          fontIndex = (fontIndex + 1) % fonts.length;
+          applyFont(); break;
+        case "enter":
+          window.location.href = "garden.html"; break;
+      }
+    });
+
+    function updateClock() {
+      const now = new Date();
+      document.getElementById("clockTime").textContent =
+        now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+      document.getElementById("clockDate").textContent =
+        now.toLocaleDateString([], { weekday: "short", month: "short", day: "numeric" });
+    }
+    updateClock();
+    setInterval(updateClock, 1000);
+
+    const CHARS = "AaBbCcDdEeFfHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz!.,:;?";
+    function scramble(el) {
+      const original = el.dataset.original || el.textContent;
+      el.dataset.original = original;
+      let frame = 0;
+      clearInterval(el._scrambleTimer);
+      el._scrambleTimer = setInterval(() => {
+        const lockedChars = Math.floor((frame / 18) * original.length);
+        el.textContent = original.split("").map((ch, i) => {
+          if (ch === " ") return " ";
+          if (i < lockedChars) return ch;
+          return CHARS[Math.floor(Math.random() * CHARS.length)];
+        }).join("");
+        if (++frame > 18) { el.textContent = original; clearInterval(el._scrambleTimer); }
+      }, 40);
+    }
+    function unscramble(el) {
+      clearInterval(el._scrambleTimer);
+      el.textContent = el.dataset.original || el.textContent;
+    }
+    [line1, line2].forEach((el, i) => {
+      el.addEventListener("mouseenter", () => scramble(el));
+      el.addEventListener("mouseleave", () => unscramble(el));
+      setTimeout(() => scramble(el), i * 200);
+    });
+
+    renderImages();
+    applyFont();
+  </script>
+</body>
+</html>

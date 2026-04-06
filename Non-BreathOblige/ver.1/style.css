@@ -1,0 +1,171 @@
+* {
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: #f0f0f0;
+  color: #1a1a1a;
+  font-family: "Inter", "Helvetica Neue", sans-serif;
+  overflow-x: auto;
+  overflow-y: hidden;
+  height: 100%;
+}
+
+body {
+  background: #f1f1f1;
+}
+
+.app {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  width: max-content;
+}
+
+section {
+  width: 100vw;
+  height: 100vh;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 60px 20px;
+  position: relative;
+}
+
+/* 去掉边框，改用阴影层级 */
+.panel-content {
+  width: min(1000px, 90%);
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  padding: 40px;
+  border-radius: 0;
+  box-shadow: 20px 20px 60px #d1d1d1, -20px -20px 60px #ffffff;
+}
+
+.eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #888;
+  margin-bottom: 20px;
+  display: block;
+}
+
+h1 {
+  margin: 0 0 20px 0;
+  font-size: clamp(40px, 8vw, 80px);
+  font-weight: 900;
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  color: #1a1a1a;
+}
+
+.intro-text {
+  font-size: 18px;
+  max-width: 500px;
+  line-height: 1.5;
+  color: #444;
+}
+
+/* 浮动控制面板 */
+.controls-fixed {
+  position: fixed;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  display: flex;
+  gap: 10px;
+  background: #1a1a1a;
+  padding: 10px 20px;
+  border-radius: 100px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+button,
+select {
+  background: transparent;
+  border: none;
+  color: #fff;
+  padding: 10px 15px;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+button:hover {
+  opacity: 0.7;
+}
+
+button:disabled {
+  opacity: 0.2;
+}
+
+#langSelect {
+  background: #333;
+  border-radius: 50px;
+  margin-left: 10px;
+}
+
+/* 视觉区域全屏化 */
+.visual-panel {
+  padding: 0;
+  height: 100vh;
+  background: #f1f1f1;
+  overflow: hidden;
+  position: relative;
+}
+
+
+#canvasContainer {
+  width: 100vw;
+  height: 100vh;
+  background: #f1f1f1;
+}
+
+/* 文本展示深度 */
+#transcriptBox {
+  font-size: 24px;
+  line-height: 1.8;
+  color: #222;
+  min-height: 200px;
+  border-left: 4px solid #1a1a1a;
+  padding-left: 30px;
+  margin-top: 40px;
+  white-space: pre-wrap;
+}
+
+.meta-info {
+  position: absolute;
+  top: 40px;
+  right: 40px;
+  text-align: right;
+  font-family: monospace;
+  font-size: 12px;
+  color: #999;
+}
+
+@media (max-width: 768px) {
+  .controls-fixed {
+    width: 90%;
+    bottom: 20px;
+    justify-content: center;
+  }
+
+  h1 {
+    font-size: 40px;
+  }
+
+  #transcriptBox {
+    font-size: 18px;
+  }
+}

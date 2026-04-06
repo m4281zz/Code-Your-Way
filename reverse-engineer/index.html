@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Low Tech Magazine</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+
+  <div class="top-area">
+    <header>
+      <h1><a href="index.html" class="logo">LOW←TECH MAGAZINE</a></h1>
+
+      <p class="tagline">
+        This is a solar-powered website, which means it sometimes goes offline ☀
+      </p>
+
+      <nav class="main-nav">
+        <div class="language-dropdown">
+          <button id="langBtn" class="language-toggle" aria-expanded="false" aria-haspopup="true">
+            <span class="lang-icon">🌐</span>
+            <span>languages</span>
+          </button>
+
+          <ul id="langMenu" class="language-menu">
+            <li><a href="/en">English</a></li>
+            <li><a href="/fr">Français</a></li>
+            <li><a href="/de">Deutsch</a></li>
+            <li><a href="/nl">Nederlands</a></li>
+            <li><a href="/es">Español</a></li>
+          </ul>
+        </div>
+
+        <a href="#">About</a>
+        <a href="#" class="nav-blue">Low-tech Solutions</a>
+        <a href="#" class="nav-red">High-tech Problems</a>
+        <a href="#" class="nav-green">Obsolete Technology</a>
+        <a href="#">Archive</a>
+        <a href="#">Donate</a>
+        <a href="#">NTM</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="hero-text">
+          <h2>Winter is Coming: Build a Solar Powered Foot Stove</h2>
+
+          <p>
+            This guide explains how to construct an electric heating device powered
+            by a small solar panel. Thanks to its heat storage, the heat cube retains
+            its warmth for hours after sunset.
+          </p>
+
+          <time>November 16, 2025</time>
+        </div>
+
+        <div class="hero-image">
+          <img src="image.jpg" alt="Solar powered foot stove">
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <section class="article-grid">
+    <article class="card">
+      <img src="images/coffee.jpg" alt="Solar powered coffee setup">
+      <h3>How to Brew Solar Powered Coffee</h3>
+      <p>This guide explains how to construct an energy-efficient coffee maker.</p>
+      <p class="date">November 9, 2025</p>
+    </article>
+
+    <article class="card">
+      <img src="images/book.jpg" alt="Book series cover">
+      <h3>Thematic Book Series</h3>
+      <p>The fifth volume in a series opening Low-tech Magazine’s archive.</p>
+      <p class="date">November 4, 2025</p>
+    </article>
+
+    <article class="card">
+      <img src="images/oven.jpg" alt="Solar powered electric oven">
+      <h3>How to Build a Solar Powered Electric Oven</h3>
+      <p>This guide explains how to construct a solar powered cooking device.</p>
+      <p class="date">October 12, 2025</p>
+    </article>
+  </section>
+
+  <nav class="pagination">
+    <span>1 / 15</span>
+    <a href="#">>></a>
+  </nav>
+
+  <footer class="site-footer">
+    <div class="footer-brand">
+      LOW←TECH MAGAZINE
+    </div>
+
+    <div class="footer-grid">
+      <section>
+        <h3>Server Stats</h3>
+        <ul>
+          <li>Location: Barcelona</li>
+          <li>Time: 04:28 CET</li>
+          <li>Battery: 41%</li>
+          <li>Power used: 1.81W</li>
+          <li>Uptime: 1 day</li>
+        </ul>
+      </section>
+
+      <section>
+        <h3>Forecast</h3>
+        <ul>
+          <li>today ☁</li>
+          <li>tomorrow ☀</li>
+          <li>day after tomorrow ☁</li>
+        </ul>
+      </section>
+
+      <section>
+        <h3>Info</h3>
+        <ul>
+          <li><a href="#">About</a></li>
+          <li><a href="#">Power</a></li>
+          <li><a href="#">Our Team</a></li>
+          <li><a href="#">Donate</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+        </ul>
+      </section>
+
+      <section>
+        <h3>Contact</h3>
+        <ul>
+          <li>© Kris De Decker</li>
+          <li>solar [at] lowtechmagazine [dot] com</li>
+        </ul>
+
+        <div class="social-icons">
+          <a href="#"><img src="icons/rss.png" alt="RSS"></a>
+          <a href="#"><img src="icons/twitter.png" alt="Twitter"></a>
+          <a href="#"><img src="icons/youtube.png" alt="YouTube"></a>
+        </div>
+      </section>
+    </div>
+  </footer>
+
+  <script>
+    const langBtn = document.getElementById("langBtn");
+    const langMenu = document.getElementById("langMenu");
+
+    langBtn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      langMenu.classList.toggle("show");
+
+      const expanded = langBtn.getAttribute("aria-expanded") === "true";
+      langBtn.setAttribute("aria-expanded", String(!expanded));
+    });
+
+    document.addEventListener("click", function () {
+      langMenu.classList.remove("show");
+      langBtn.setAttribute("aria-expanded", "false");
+    });
+
+    langMenu.addEventListener("click", function (e) {
+      e.stopPropagation();
+    });
+  </script>
+
+</body>
+</html>
